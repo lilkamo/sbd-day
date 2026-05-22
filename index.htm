@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Fortis SBD v2.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -507,7 +508,12 @@ function openNote(idx){const n=data.notes[idx];document.getElementById('notes-li
 function closeNote(){document.getElementById('notes-list-view').style.display='block';document.getElementById('note-detail-view').style.display='none';}
 function deleteNote(idx){data.notes.splice(idx,1);persist();closeNote();renderNotesList();}
 
-load();loadInputs();renderSBD();updateTimerDisplay();
+document.addEventListener('DOMContentLoaded', function() {
+  load();
+  loadInputs();
+  renderSBD();
+  updateTimerDisplay();
+});
 </script>
 </body>
 </html>
