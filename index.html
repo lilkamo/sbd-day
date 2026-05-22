@@ -5,351 +5,509 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="SBD Day">
-<meta name="theme-color" content="#1C1C1E">
-<title>SBD Day</title>
+<meta name="apple-mobile-web-app-title" content="Fortis">
+<meta name="theme-color" content="#080808">
+<title>Fortis</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: #F2F2F7; color: #1C1C1E; min-height: 100vh;
-  padding-bottom: calc(70px + env(safe-area-inset-bottom));
+:root {
+  --bg:#080808;--bg2:#111111;--bg3:#1A1A1A;--bg4:#222222;
+  --border:#242424;--border2:#303030;
+  --text:#F0F0F0;--text2:#909090;--text3:#505050;
+  --gold:#D4AF6A;--gold2:#B8935A;--gold3:#8A6A3A;--gold-bg:rgba(212,175,106,0.08);--gold-border:rgba(212,175,106,0.25);
+  --green:#3DBA7A;--green-bg:rgba(61,186,122,0.1);--green-border:rgba(61,186,122,0.3);
+  --blue:#4A8FD4;--blue-bg:rgba(74,143,212,0.1);--blue-border:rgba(74,143,212,0.3);
+  --red:#D45A5A;--red-bg:rgba(212,90,90,0.1);--red-border:rgba(212,90,90,0.3);
+  --orange:#D4844A;--orange-bg:rgba(212,132,74,0.1);--orange-border:rgba(212,132,74,0.3);
+  --purple:#8A70D4;--purple-bg:rgba(138,112,212,0.1);--purple-border:rgba(138,112,212,0.3);
+  --r:16px;--rs:10px;--rx:7px;
 }
-.header {
-  background: #1C1C1E; color: #fff;
-  padding: 14px 20px 12px;
-  padding-top: calc(14px + env(safe-area-inset-top));
-  position: sticky; top: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between;
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{font-size:16px;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;
+  background:var(--bg);color:var(--text);min-height:100vh;
+  padding-bottom:calc(80px + env(safe-area-inset-bottom));
+  padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right);
+  -webkit-font-smoothing:antialiased;
 }
-.header-title { font-size: 18px; font-weight: 600; letter-spacing: -0.3px; }
-.header-sub { font-size: 12px; opacity: 0.55; margin-top: 2px; }
-.header-rule { font-size: 11px; background: #E24B4A; color: #fff; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
-.bottom-nav {
-  position: fixed; bottom: 0; left: 0; right: 0;
-  background: #fff; border-top: 0.5px solid #C6C6C8;
-  display: flex; z-index: 100;
-  padding-bottom: env(safe-area-inset-bottom);
+.header{
+  background:var(--bg);border-bottom:0.5px solid var(--border);
+  padding:calc(16px + env(safe-area-inset-top)) 20px 14px;
+  position:sticky;top:0;z-index:200;
+  display:flex;justify-content:space-between;align-items:flex-end;
 }
-.nav-btn {
-  flex: 1; display: flex; flex-direction: column; align-items: center;
-  justify-content: center; padding: 10px 4px 8px;
-  border: none; background: transparent; cursor: pointer;
-  color: #8E8E93; font-size: 10px; font-weight: 500; gap: 3px;
+.header-wordmark{display:flex;align-items:center;gap:10px;}
+.header-logo{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--gold3),var(--gold));display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;color:#080808;font-style:italic;}
+.header-title{font-size:22px;font-weight:800;letter-spacing:-0.8px;background:linear-gradient(135deg,var(--gold),#F0D080);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.header-sub{font-size:11px;color:var(--text3);margin-top:2px;letter-spacing:0.03em;}
+.header-badge{font-size:11px;font-weight:600;background:var(--gold-bg);color:var(--gold);padding:5px 12px;border-radius:20px;border:0.5px solid var(--gold-border);}
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(8,8,8,0.96);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-top:0.5px solid var(--border);
+  display:flex;z-index:300;
+  padding-bottom:calc(env(safe-area-inset-bottom) + 6px);
+  padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right);
 }
-.nav-btn.active { color: #1C1C1E; }
-.nav-icon { font-size: 21px; line-height: 1; }
-.screen { display: none; padding: 16px; }
-.screen.active { display: block; }
-.athlete-switcher { display: flex; gap: 8px; margin-bottom: 16px; }
-.athlete-btn {
-  flex: 1; padding: 10px; border-radius: 10px;
-  border: 1.5px solid #C6C6C8; background: #fff;
-  font-size: 14px; font-weight: 600; color: #8E8E93; cursor: pointer; text-align: center;
-}
-.athlete-btn.active { border-color: #1C1C1E; background: #1C1C1E; color: #fff; }
-.card { background: #fff; border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
-.card-title { font-size: 12px; font-weight: 600; color: #8E8E93; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
-.rm-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 0; border-bottom: 0.5px solid #F2F2F7;
-}
-.rm-row:last-child { border-bottom: none; }
-.rm-name { font-size: 15px; font-weight: 500; color: #1C1C1E; }
-.rm-tm { font-size: 12px; color: #8E8E93; margin-top: 2px; }
-.rm-input-row { display: flex; align-items: center; gap: 6px; }
-.rm-input-row input {
-  width: 78px; font-size: 16px; font-weight: 600; text-align: center;
-  border: 1px solid #C6C6C8; border-radius: 8px; padding: 7px 4px;
-  background: #F2F2F7; color: #1C1C1E;
-}
-.rm-input-row input:focus { outline: none; border-color: #1C1C1E; background: #fff; }
-.rm-unit { font-size: 13px; color: #8E8E93; }
-.summary-strip { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 14px; }
-.s-cell { background: #fff; border-radius: 12px; padding: 10px; text-align: center; }
-.s-lift { font-size: 11px; color: #8E8E93; font-weight: 500; margin-bottom: 4px; }
-.s-val { font-size: 22px; font-weight: 600; color: #1C1C1E; letter-spacing: -0.5px; }
-.s-pct { font-size: 11px; color: #8E8E93; margin-top: 1px; }
-.lift-card { background: #fff; border-radius: 14px; margin-bottom: 10px; overflow: hidden; }
-.lift-header { padding: 12px 16px 10px; display: flex; justify-content: space-between; align-items: center; }
-.lift-header.squat { background: #1C1C1E; }
-.lift-header.bench { background: #1C3A5E; }
-.lift-header.deadlift { background: #3B1A1A; }
-.lift-title { font-size: 16px; font-weight: 600; color: #fff; }
-.lift-cue { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
-.lift-topset-val { font-size: 22px; font-weight: 600; color: #fff; letter-spacing: -0.5px; text-align: right; }
-.lift-topset-lbl { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 1px; text-align: right; }
-.ladder-lbl {
-  font-size: 11px; font-weight: 600; color: #8E8E93;
-  text-transform: uppercase; letter-spacing: 0.06em;
-  padding: 10px 16px 6px;
-}
-.step {
-  display: flex; align-items: center; gap: 12px;
-  padding: 9px 16px; border-bottom: 0.5px solid #F2F2F7;
-}
-.step:last-child { border-bottom: none; }
-.step-circle {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: #F2F2F7; display: flex; align-items: center;
-  justify-content: center; font-size: 11px; font-weight: 700;
-  color: #8E8E93; flex-shrink: 0;
-}
-.step-circle.top { background: #1C1C1E; color: #fff; }
-.step-circle.back { background: #EAF3DE; color: #27500A; }
-.step-body { flex: 1; min-width: 0; }
-.step-kg { font-size: 15px; font-weight: 600; color: #1C1C1E; }
-.step-pct { font-size: 12px; color: #8E8E93; margin-left: 6px; }
-.step-plates { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 3px; }
-.plate { font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px; color: #fff; }
-.p25{background:#C0392B;}.p20{background:#1F4E79;}.p15{background:#D4870A;}.p10{background:#1A7A3C;}.p5{background:#5A5A5F;}.p25k{background:#9B59B6;}.p125{background:#95A5A6;}
-.step-note { font-size: 11px; color: #8E8E93; margin-top: 2px; }
-.step-right { text-align: right; flex-shrink: 0; }
-.step-sets { font-size: 13px; font-weight: 600; color: #1C1C1E; }
-.step-type { font-size: 10px; color: #8E8E93; margin-top: 1px; text-transform: uppercase; letter-spacing: 0.04em; }
-.rest-pill { margin: 0 16px 12px; background: #F2F2F7; border-radius: 8px; padding: 8px 12px; font-size: 12px; color: #5A5A5F; }
-.rule-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 0.5px solid #F2F2F7; }
-.rule-item:last-child { border-bottom: none; }
-.rule-icon { font-size: 20px; flex-shrink: 0; }
-.rule-text { font-size: 14px; color: #3C3C43; line-height: 1.6; }
-.rule-text strong { font-weight: 600; color: #1C1C1E; }
-.rule-header { font-size: 12px; font-weight: 600; color: #8E8E93; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
-.alert-card { background: #FFF0F0; border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
-.alert-title { font-size: 12px; font-weight: 600; color: #C0392B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
-.empty { text-align: center; padding: 36px 20px; color: #8E8E93; font-size: 14px; line-height: 1.7; }
-.empty strong { display: block; font-size: 16px; font-weight: 600; color: #1C1C1E; margin-bottom: 6px; }
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 4px 6px;border:none;background:transparent;cursor:pointer;color:var(--text3);font-size:9px;font-weight:600;gap:4px;letter-spacing:0.05em;text-transform:uppercase;}
+.nav-btn.active{color:var(--gold);}
+.nav-icon{width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:7px;}
+.nav-btn.active .nav-icon{background:var(--gold-bg);}
+.nav-svg{width:18px;height:18px;stroke-width:1.8;fill:none;}
+.nav-btn.active .nav-svg{stroke:var(--gold);}
+.nav-btn:not(.active) .nav-svg{stroke:var(--text3);}
+.screen{display:none;padding:14px 16px;}
+.screen.active{display:block;}
+.card{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:12px;}
+.card-title{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:14px;}
+.input-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:0.5px solid var(--border);}
+.input-row:last-child{border-bottom:none;}
+.input-label{font-size:15px;font-weight:500;color:var(--text);}
+.input-sub{font-size:11px;color:var(--text3);margin-top:3px;}
+.input-right{display:flex;align-items:center;gap:8px;}
+.input-right input{width:78px;font-size:17px;font-weight:700;text-align:center;border:1px solid var(--border2);border-radius:var(--rs);padding:8px 4px;background:var(--bg3);color:var(--text);letter-spacing:-0.5px;}
+.input-right input:focus{outline:none;border-color:var(--gold);}
+.input-unit{font-size:12px;color:var(--text3);font-weight:500;}
+.wu-step{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--border);}
+.wu-step:last-child{border-bottom:none;}
+.wu-circle{width:30px;height:30px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text3);flex-shrink:0;border:0.5px solid var(--border2);}
+.wu-circle.top{background:var(--gold-bg);color:var(--gold);border-color:var(--gold-border);}
+.wu-circle.back{background:var(--green-bg);color:var(--green);border-color:var(--green-border);}
+.wu-body{flex:1;}
+.wu-kg{font-size:16px;font-weight:800;color:var(--text);letter-spacing:-0.5px;}
+.wu-pct{font-size:11px;color:var(--text3);margin-left:6px;}
+.wu-plates{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px;}
+.plate{font-size:10px;font-weight:800;padding:2px 6px;border-radius:4px;color:#fff;}
+.p25{background:#C0392B;}.p20{background:#1F4E79;}.p15{background:#C47A0A;}.p10{background:#1A7A3C;}.p5{background:#4A4A4A;}.p25k{background:#6B3FAA;}.p125{background:#5A6A6A;}
+.wu-right{text-align:right;flex-shrink:0;}
+.wu-sets{font-size:13px;font-weight:700;color:var(--text);}
+.wu-type{font-size:9px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:0.06em;font-weight:600;}
+.lift-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.lift-tab{padding:11px 6px;border-radius:var(--rs);border:0.5px solid var(--border2);background:var(--bg2);font-size:13px;font-weight:700;color:var(--text2);cursor:pointer;text-align:center;letter-spacing:0.02em;}
+.lift-tab.sq.active{border-color:var(--blue-border);background:var(--blue-bg);color:var(--blue);}
+.lift-tab.bp.active{border-color:var(--green-border);background:var(--green-bg);color:var(--green);}
+.lift-tab.dl.active{border-color:var(--red-border);background:var(--red-bg);color:var(--red);}
+.pct-row{display:flex;gap:8px;margin-bottom:14px;}
+.pct-btn{flex:1;padding:9px 6px;border-radius:var(--rs);border:0.5px solid var(--border2);background:var(--bg2);font-size:12px;font-weight:700;color:var(--text2);cursor:pointer;text-align:center;}
+.pct-btn.active{border-color:var(--gold-border);background:var(--gold-bg);color:var(--gold);}
+.lift-header-sq{background:linear-gradient(135deg,#0D0D1F,#111128);border-radius:var(--r) var(--r) 0 0;padding:14px 16px;border-bottom:0.5px solid rgba(74,143,212,0.2);}
+.lift-header-bp{background:linear-gradient(135deg,#0D1A0D,#111F11);border-radius:var(--r) var(--r) 0 0;padding:14px 16px;border-bottom:0.5px solid rgba(61,186,122,0.2);}
+.lift-header-dl{background:linear-gradient(135deg,#1A0D0D,#1F1111);border-radius:var(--r) var(--r) 0 0;padding:14px 16px;border-bottom:0.5px solid rgba(212,90,90,0.2);}
+.lift-card-body{background:var(--bg2);border-radius:0 0 var(--r) var(--r);border:0.5px solid var(--border);border-top:none;padding:0 0 4px;}
+.lift-name{font-size:17px;font-weight:800;color:var(--text);letter-spacing:-0.3px;}
+.lift-cue{font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px;}
+.lift-top-val{font-size:26px;font-weight:900;color:var(--gold);letter-spacing:-1px;}
+.lift-top-lbl{font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px;text-transform:uppercase;letter-spacing:0.06em;}
+.rest-note{background:var(--bg3);border-radius:var(--rx);padding:9px 14px;margin:8px 16px 12px;font-size:11px;color:var(--text3);font-weight:500;}
+.summary-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.s-cell{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--rs);padding:10px;text-align:center;}
+.s-lbl{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;}
+.s-val{font-size:20px;font-weight:800;color:var(--gold);letter-spacing:-0.5px;}
+.s-sub{font-size:10px;color:var(--text3);margin-top:2px;}
+.info-box{background:var(--gold-bg);border:0.5px solid var(--gold-border);border-radius:var(--rs);padding:11px 14px;margin-bottom:14px;font-size:12px;color:var(--gold);line-height:1.6;font-weight:500;}
+.rule-item{display:flex;gap:12px;padding:13px 0;border-bottom:0.5px solid var(--border);}
+.rule-item:last-child{border-bottom:none;}
+.rule-icon-wrap{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.rule-svg{width:16px;height:16px;stroke-width:1.8;fill:none;}
+.rule-text{font-size:13px;color:var(--text2);line-height:1.6;}
+.rule-text strong{color:var(--text);font-weight:600;}
+.tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.tool-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--r);padding:16px 12px;cursor:pointer;text-align:center;}
+.tool-card:active{border-color:var(--gold-border);background:var(--gold-bg);}
+.tool-icon-wrap{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;}
+.tool-svg{width:20px;height:20px;stroke-width:1.8;fill:none;}
+.tool-name{font-size:13px;font-weight:700;color:var(--text);}
+.tool-desc{font-size:11px;color:var(--text3);margin-top:3px;line-height:1.4;}
+.back-btn{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--gold);background:none;border:none;cursor:pointer;margin-bottom:16px;padding:0;}
+.lift-sel{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.lift-sel-btn{padding:10px 6px;border-radius:var(--rs);border:0.5px solid var(--border2);background:var(--bg2);font-size:12px;font-weight:700;color:var(--text2);cursor:pointer;text-align:center;}
+.lift-sel-btn.active{border-color:var(--gold);background:var(--gold-bg);color:var(--gold);}
+.tool-screen{display:none;}
+.tool-screen.active{display:block;}
+.result-btn{padding:7px 14px;border-radius:var(--rx);border:0.5px solid var(--border2);font-size:12px;font-weight:700;cursor:pointer;background:var(--bg3);color:var(--text2);}
+.result-btn.good{border-color:var(--green-border);background:var(--green-bg);color:var(--green);}
+.result-btn.fail{border-color:var(--red-border);background:var(--red-bg);color:var(--red);}
+.result-tag{font-size:12px;font-weight:700;padding:5px 12px;border-radius:var(--rx);}
+.tag-good{background:var(--green-bg);color:var(--green);}
+.tag-fail{background:var(--red-bg);color:var(--red);}
+.pr-banner{background:linear-gradient(135deg,#1A1000,#2A1E00);border:1px solid var(--gold-border);border-radius:var(--r);padding:20px;text-align:center;margin-bottom:12px;}
+.pr-title{font-size:10px;font-weight:700;color:var(--gold2);text-transform:uppercase;letter-spacing:0.12em;}
+.pr-val{font-size:42px;font-weight:900;background:linear-gradient(135deg,var(--gold),#F0D080);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-2px;margin:4px 0;}
+.pr-sub{font-size:12px;color:var(--gold3);}
+.timer-ring{position:relative;width:180px;height:180px;margin:0 auto 24px;}
+.timer-svg{transform:rotate(-90deg);}
+.timer-track{fill:none;stroke:var(--bg3);stroke-width:8;}
+.timer-progress{fill:none;stroke:var(--gold);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1s linear;stroke-dasharray:502;stroke-dashoffset:0;}
+.timer-display{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
+.timer-time{font-size:38px;font-weight:800;letter-spacing:-1px;color:var(--text);}
+.timer-label{font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-top:2px;}
+.timer-presets{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
+.timer-preset{padding:10px 6px;border-radius:var(--rs);border:0.5px solid var(--border2);background:var(--bg2);font-size:12px;font-weight:700;color:var(--text2);cursor:pointer;text-align:center;}
+.timer-preset.active{border-color:var(--gold);background:var(--gold-bg);color:var(--gold);}
+.timer-btns{display:flex;gap:10px;justify-content:center;}
+.timer-btn{padding:13px 28px;border-radius:var(--rs);border:none;font-size:15px;font-weight:700;cursor:pointer;}
+.timer-start{background:var(--gold);color:#080808;}
+.timer-reset{background:var(--bg3);color:var(--text2);border:0.5px solid var(--border2);}
+.est-result{text-align:center;padding:20px;background:var(--bg3);border-radius:var(--r);border:0.5px solid var(--border);margin-top:14px;}
+.est-val{font-size:42px;font-weight:900;color:var(--gold);letter-spacing:-2px;}
+.note-item{padding:12px 14px;border-bottom:0.5px solid var(--border);cursor:pointer;}
+.note-item:last-child{border-bottom:none;}
+.note-item-title{font-size:14px;font-weight:600;color:var(--text);}
+.note-item-preview{font-size:12px;color:var(--text3);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.note-item-date{font-size:10px;color:var(--text3);margin-top:4px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;}
+.note-detail-title{font-size:17px;font-weight:800;color:var(--text);margin-bottom:8px;letter-spacing:-0.3px;}
+.note-detail-body{font-size:14px;color:var(--text2);line-height:1.7;white-space:pre-wrap;}
+.note-detail-date{font-size:10px;color:var(--text3);margin-top:10px;text-transform:uppercase;letter-spacing:0.04em;}
+.bw-entry{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:0.5px solid var(--border);}
+.bw-entry:last-child{border-bottom:none;}
+.bw-weight{font-size:17px;font-weight:800;color:var(--gold);letter-spacing:-0.5px;}
+.bw-del{background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;padding:4px;}
+select{background:var(--bg3);border:0.5px solid var(--border2);border-radius:var(--rs);padding:9px 12px;color:var(--text);font-size:14px;font-weight:600;font-family:inherit;-webkit-appearance:none;cursor:pointer;}
+select:focus{outline:none;border-color:var(--gold);}
+.empty{text-align:center;padding:48px 24px;}
+.empty-icon{width:52px;height:52px;border-radius:14px;background:var(--bg3);border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
+.empty-svg{width:24px;height:24px;stroke:var(--text3);stroke-width:1.5;fill:none;}
+.empty-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.empty-sub{font-size:13px;color:var(--text3);line-height:1.6;}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div>
-    <div class="header-title">SBD Day</div>
-    <div class="header-sub" id="header-sub">85% confidence session</div>
-  </div>
-  <div class="header-rule">Max 85%</div>
-</div>
-
-<div id="screen-setup" class="screen active">
-  <div class="athlete-switcher">
-    <button class="athlete-btn active" onclick="switchAthlete(0,this)">Athlete 1</button>
-    <button class="athlete-btn" onclick="switchAthlete(1,this)">Athlete 2</button>
-  </div>
-  <div class="card">
-    <div class="card-title">1RM — <span id="setup-name">Athlete 1</span></div>
-    <div class="rm-row">
-      <div><div class="rm-name">Back squat</div><div class="rm-tm" id="tm-sq">85%: — · back-off 75%: —</div></div>
-      <div class="rm-input-row"><input type="number" id="rm-sq" inputmode="numeric" placeholder="—" oninput="save();render()"><span class="rm-unit">kg</span></div>
-    </div>
-    <div class="rm-row">
-      <div><div class="rm-name">Bench press</div><div class="rm-tm" id="tm-bp">85%: — · back-off 75%: —</div></div>
-      <div class="rm-input-row"><input type="number" id="rm-bp" inputmode="numeric" placeholder="—" oninput="save();render()"><span class="rm-unit">kg</span></div>
-    </div>
-    <div class="rm-row">
-      <div><div class="rm-name">Deadlift</div><div class="rm-tm" id="tm-dl">85%: — · back-off 75%: —</div></div>
-      <div class="rm-input-row"><input type="number" id="rm-dl" inputmode="numeric" placeholder="—" oninput="save();render()"><span class="rm-unit">kg</span></div>
+  <div class="header-wordmark">
+    <div class="header-logo">F</div>
+    <div>
+      <div class="header-title">Fortis</div>
+      <div class="header-sub" id="hdr-sub">SBD session tool</div>
     </div>
   </div>
-  <div style="font-size:12px;color:#8E8E93;text-align:center;margin-top:-4px;">Numbers save per athlete on this device</div>
+  <div class="header-badge" id="hdr-badge">SBD</div>
 </div>
 
-<div id="screen-session" class="screen">
-  <div class="athlete-switcher">
-    <button class="athlete-btn active" onclick="switchAthlete(0,this)">Athlete 1</button>
-    <button class="athlete-btn" onclick="switchAthlete(1,this)">Athlete 2</button>
+<!-- SBD SCREEN -->
+<div id="screen-sbd" class="screen active">
+  <div class="card">
+    <div class="card-title">Your 1RMs</div>
+    <div class="input-row"><div><div class="input-label">Back squat</div><div class="input-sub" id="sub-sq">Enter to see session</div></div><div class="input-right"><input type="number" id="rm-sq" inputmode="numeric" placeholder="—" oninput="save();renderSBD()"><span class="input-unit">kg</span></div></div>
+    <div class="input-row"><div><div class="input-label">Bench press</div><div class="input-sub" id="sub-bp">Enter to see session</div></div><div class="input-right"><input type="number" id="rm-bp" inputmode="numeric" placeholder="—" oninput="save();renderSBD()"><span class="input-unit">kg</span></div></div>
+    <div class="input-row"><div><div class="input-label">Deadlift</div><div class="input-sub" id="sub-dl">Enter to see session</div></div><div class="input-right"><input type="number" id="rm-dl" inputmode="numeric" placeholder="—" oninput="save();renderSBD()"><span class="input-unit">kg</span></div></div>
   </div>
-  <div id="session-out"></div>
+
+  <div class="card">
+    <div class="card-title">Session percentage</div>
+    <div class="pct-row">
+      <button class="pct-btn active" onclick="setPct(0.85,this)">85%</button>
+      <button class="pct-btn" onclick="setPct(0.875,this)">87.5%</button>
+      <button class="pct-btn" onclick="setPct(0.90,this)">90%</button>
+      <button class="pct-btn" onclick="setPct(0.95,this)">95%</button>
+    </div>
+    <div style="font-size:11px;color:var(--text3);">85% is standard pre-test. Adjust freely based on the goal of the day.</div>
+  </div>
+
+  <div id="sbd-summary" style="display:none;">
+    <div class="summary-strip" id="sbd-strip"></div>
+    <div class="lift-tabs">
+      <button class="lift-tab sq active" onclick="showLift('sq',this)">Squat</button>
+      <button class="lift-tab bp" onclick="showLift('bp',this)">Bench</button>
+      <button class="lift-tab dl" onclick="showLift('dl',this)">Deadlift</button>
+    </div>
+    <div id="lift-out"></div>
+  </div>
 </div>
 
-<div id="screen-rules" class="screen">
-  <div class="alert-card">
-    <div class="alert-title">The one rule</div>
-    <div style="font-size:14px;color:#3C3C43;line-height:1.7;">Nothing above 85% today. One day rest before 1RM Monday. The goal is to feel the weight, move well, and walk out confident — not to PR.</div>
-  </div>
+<!-- WARM-UP SCREEN -->
+<div id="screen-warmup" class="screen">
   <div class="card">
-    <div class="rule-header">Session rules</div>
-    <div class="rule-item"><div class="rule-icon">📋</div><div class="rule-text"><strong>Order: squat → bench → deadlift.</strong> Competition order. CNS is freshest for squats, deadlift goes last.</div></div>
-    <div class="rule-item"><div class="rule-icon">🎯</div><div class="rule-text"><strong>One top single at 85% per lift.</strong> If it moves well and feels easy — do not add more weight. That feeling is exactly what you want going into Monday.</div></div>
-    <div class="rule-item"><div class="rule-icon">🔄</div><div class="rule-text"><strong>Back-offs at 75% of 1RM.</strong> Two sets of 3 on squat and bench. One set of 3 on deadlift only — then session is done.</div></div>
-    <div class="rule-item"><div class="rule-icon">⏱</div><div class="rule-text"><strong>Rest times.</strong> 3–4 min after squat/bench top set. 4–5 min after deadlift top set. 2–3 min between back-offs.</div></div>
-    <div class="rule-item"><div class="rule-icon">🚫</div><div class="rule-text"><strong>No accessories. No cardio.</strong> Session ends when the deadlift back-off is done.</div></div>
+    <div class="card-title">Enter any target weight</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <input type="number" id="wu-manual" inputmode="numeric" placeholder="e.g. 140" style="flex:1;font-size:20px;font-weight:700;text-align:center;border:0.5px solid var(--border2);border-radius:var(--rs);padding:10px;background:var(--bg3);color:var(--text);letter-spacing:-0.5px;" oninput="renderWarmup()">
+      <span style="font-size:13px;color:var(--text3);font-weight:500;">kg</span>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px;">Or pick from your 1RMs below</div>
+    <div style="display:flex;gap:8px;margin-top:10px;" id="wu-quick-btns"></div>
   </div>
-  <div class="card">
-    <div class="rule-header">Recovery before Monday</div>
-    <div class="rule-item"><div class="rule-icon">🍽</div><div class="rule-text"><strong>Eat at maintenance today and Sunday.</strong> Not at deficit. You need glycogen in the tank for Monday's attempts.</div></div>
-    <div class="rule-item"><div class="rule-icon">💧</div><div class="rule-text"><strong>3.5L water both days.</strong> Dehydration kills strength output.</div></div>
-    <div class="rule-item"><div class="rule-icon">😴</div><div class="rule-text"><strong>8+ hours sleep Saturday and Sunday night.</strong> Most important recovery variable. Non-negotiable.</div></div>
-    <div class="rule-item"><div class="rule-icon">🚶</div><div class="rule-text"><strong>Sunday is full rest.</strong> Walk only — no training, nothing that taxes the CNS.</div></div>
+  <div id="wu-out"></div>
+</div>
+
+<!-- 1RM WEEK SCREEN -->
+<div id="screen-1rm" class="screen">
+  <div class="lift-sel">
+    <button class="lift-sel-btn active" id="1rm-btn-sq" onclick="switch1RMLift('sq')">Squat</button>
+    <button class="lift-sel-btn" id="1rm-btn-bp" onclick="switch1RMLift('bp')">Bench</button>
+    <button class="lift-sel-btn" id="1rm-btn-dl" onclick="switch1RMLift('dl')">Deadlift</button>
   </div>
-  <div class="card">
-    <div class="rule-header">Monday 1RM mindset</div>
-    <div class="rule-item"><div class="rule-icon">🔁</div><div class="rule-text"><strong>Warm up exactly the same way as today.</strong> Same ladder, same feel. Don't change anything that works.</div></div>
-    <div class="rule-item"><div class="rule-icon">🧠</div><div class="rule-text"><strong>Open conservatively at 90–92%.</strong> The second attempt is where you push. Don't blow it on the opener.</div></div>
-    <div class="rule-item"><div class="rule-icon">⬆️</div><div class="rule-text"><strong>Jump 5–7.5% between attempts</strong> if the first goes well. Chase the lift, not a number.</div></div>
+  <div id="1rm-out"></div>
+</div>
+
+<!-- TOOLS SCREEN -->
+<div id="screen-tools" class="screen">
+  <div id="tools-menu">
+    <div class="tools-grid">
+      <div class="tool-card" onclick="showTool('timer')">
+        <div class="tool-icon-wrap" style="background:var(--green-bg);border:0.5px solid var(--green-border);"><svg class="tool-svg" viewBox="0 0 24 24" stroke="var(--green)"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="tool-name">Rest Timer</div><div class="tool-desc">Countdown between sets</div>
+      </div>
+      <div class="tool-card" onclick="showTool('estimator')">
+        <div class="tool-icon-wrap" style="background:var(--purple-bg);border:0.5px solid var(--purple-border);"><svg class="tool-svg" viewBox="0 0 24 24" stroke="var(--purple)"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <div class="tool-name">Max Estimator</div><div class="tool-desc">Estimate 1RM from rep sets</div>
+      </div>
+      <div class="tool-card" onclick="showTool('bwlog')">
+        <div class="tool-icon-wrap" style="background:var(--orange-bg);border:0.5px solid var(--orange-border);"><svg class="tool-svg" viewBox="0 0 24 24" stroke="var(--orange)"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div class="tool-name">Weight Log</div><div class="tool-desc">Track bodyweight over time</div>
+      </div>
+      <div class="tool-card" onclick="showTool('notes')">
+        <div class="tool-icon-wrap" style="background:var(--red-bg);border:0.5px solid var(--red-border);"><svg class="tool-svg" viewBox="0 0 24 24" stroke="var(--red)"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+        <div class="tool-name">Notes</div><div class="tool-desc">Session notes and reminders</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Session rules</div>
+      <div class="rule-item"><div class="rule-icon-wrap" style="background:var(--blue-bg);"><svg class="rule-svg" viewBox="0 0 24 24" stroke="var(--blue)"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div><div class="rule-text"><strong>Order: squat → bench → deadlift.</strong> Competition order. CNS is freshest for squats, deadlift goes last.</div></div>
+      <div class="rule-item"><div class="rule-icon-wrap" style="background:var(--gold-bg);"><svg class="rule-svg" viewBox="0 0 24 24" stroke="var(--gold)"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="rule-text"><strong>One top single per lift.</strong> If it moves well and feels easy — do not add weight. That feeling is the point.</div></div>
+      <div class="rule-item"><div class="rule-icon-wrap" style="background:var(--green-bg);"><svg class="rule-svg" viewBox="0 0 24 24" stroke="var(--green)"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div><div class="rule-text"><strong>Back-off sets at 10% below top.</strong> Two sets of 3 on squat and bench. One set only on deadlift.</div></div>
+      <div class="rule-item"><div class="rule-icon-wrap" style="background:var(--purple-bg);"><svg class="rule-svg" viewBox="0 0 24 24" stroke="var(--purple)"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="rule-text"><strong>Rest 3–4 min after top sets.</strong> 2–3 min between back-offs. 4–5 min after deadlift top set.</div></div>
+      <div class="rule-item"><div class="rule-icon-wrap" style="background:var(--red-bg);"><svg class="rule-svg" viewBox="0 0 24 24" stroke="var(--red)"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div><div class="rule-text"><strong>No accessories. No cardio.</strong> Session ends when the deadlift back-off is done.</div></div>
+    </div>
+  </div>
+
+  <div id="tool-timer" class="tool-screen">
+    <button class="back-btn" onclick="hideTool();stopTimer()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Tools</button>
+    <div class="card" style="text-align:center;">
+      <div class="card-title">Rest timer</div>
+      <div class="timer-presets">
+        <div class="timer-preset" onclick="setTimer(60,this)">1 min</div>
+        <div class="timer-preset" onclick="setTimer(120,this)">2 min</div>
+        <div class="timer-preset active" onclick="setTimer(180,this)">3 min</div>
+        <div class="timer-preset" onclick="setTimer(300,this)">5 min</div>
+      </div>
+      <div class="timer-ring">
+        <svg class="timer-svg" width="180" height="180" viewBox="0 0 180 180">
+          <circle class="timer-track" cx="90" cy="90" r="80"/>
+          <circle class="timer-progress" id="timer-ring" cx="90" cy="90" r="80"/>
+        </svg>
+        <div class="timer-display">
+          <div class="timer-time" id="timer-display">3:00</div>
+          <div class="timer-label" id="timer-status">Ready</div>
+        </div>
+      </div>
+      <div class="timer-btns">
+        <button class="timer-btn timer-start" id="timer-start-btn" onclick="toggleTimer()">Start</button>
+        <button class="timer-btn timer-reset" onclick="resetTimer()">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="tool-estimator" class="tool-screen">
+    <button class="back-btn" onclick="hideTool()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Tools</button>
+    <div class="card">
+      <div class="card-title">Estimate 1RM from a rep set</div>
+      <div class="input-row"><div><div class="input-label">Weight lifted</div><div class="input-sub">The weight you used</div></div><div class="input-right"><input type="number" id="est-weight" inputmode="numeric" placeholder="—" oninput="calcEstimate()"><span class="input-unit">kg</span></div></div>
+      <div class="input-row"><div><div class="input-label">Reps completed</div><div class="input-sub">Stop before failure for accuracy</div></div><div class="input-right"><input type="number" id="est-reps" inputmode="numeric" placeholder="—" min="1" max="15" oninput="calcEstimate()"><span class="input-unit">reps</span></div></div>
+    </div>
+    <div id="est-out"></div>
+  </div>
+
+  <div id="tool-bwlog" class="tool-screen">
+    <button class="back-btn" onclick="hideTool()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Tools</button>
+    <div class="card">
+      <div class="card-title">Log today's weight</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="number" id="bw-input" inputmode="decimal" placeholder="e.g. 127.5" style="flex:1;font-size:17px;font-weight:700;border:0.5px solid var(--border2);border-radius:var(--rs);padding:10px 12px;background:var(--bg3);color:var(--text);letter-spacing:-0.5px;">
+        <span style="font-size:13px;color:var(--text3);">kg</span>
+        <button onclick="logBW()" style="padding:10px 18px;border-radius:var(--rs);border:none;background:var(--gold);color:#080808;font-size:13px;font-weight:700;cursor:pointer;">Log</button>
+      </div>
+    </div>
+    <div class="card" id="bw-chart-card" style="display:none;"><div class="card-title">Trend</div><canvas id="bw-chart" height="120"></canvas></div>
+    <div class="card" id="bw-list-card" style="display:none;"><div class="card-title">History</div><div id="bw-list"></div></div>
+  </div>
+
+  <div id="tool-notes" class="tool-screen">
+    <button class="back-btn" onclick="hideTool();closeNote()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Tools</button>
+    <div id="notes-list-view">
+      <div class="card">
+        <div class="card-title">New note</div>
+        <input type="text" id="note-title-input" placeholder="Title..." style="width:100%;font-size:15px;font-weight:600;border:0.5px solid var(--border2);border-radius:var(--rs);padding:10px 12px;background:var(--bg3);color:var(--text);margin-bottom:8px;">
+        <textarea id="note-body-input" placeholder="Write your note..." rows="3" style="width:100%;font-size:14px;border:0.5px solid var(--border2);border-radius:var(--rs);padding:10px 12px;background:var(--bg3);color:var(--text);resize:none;line-height:1.5;font-family:inherit;"></textarea>
+        <button onclick="addNote()" style="margin-top:8px;width:100%;padding:11px;border-radius:var(--rs);border:none;background:var(--gold);color:#080808;font-size:14px;font-weight:700;cursor:pointer;">Add Note</button>
+      </div>
+      <div class="card" id="notes-list-card" style="display:none;"><div class="card-title">Saved notes</div><div id="notes-list"></div></div>
+    </div>
+    <div id="note-detail-view" style="display:none;">
+      <button class="back-btn" onclick="closeNote()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>All notes</button>
+      <div class="card" id="note-detail-content"></div>
+      <div style="text-align:center;margin-top:8px;"><button id="note-delete-btn" style="font-size:12px;color:var(--red);background:transparent;border:none;cursor:pointer;padding:8px;font-weight:600;">Delete note</button></div>
+    </div>
   </div>
 </div>
 
 <nav class="bottom-nav">
-  <button class="nav-btn active" onclick="switchScreen('setup',this)"><span class="nav-icon">⚙️</span>1RM setup</button>
-  <button class="nav-btn" onclick="switchScreen('session',this)"><span class="nav-icon">🏋️</span>Session</button>
-  <button class="nav-btn" onclick="switchScreen('rules',this)"><span class="nav-icon">📋</span>Rules</button>
+  <button class="nav-btn active" onclick="switchScreen('sbd',this)">
+    <div class="nav-icon"><svg class="nav-svg" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>SBD
+  </button>
+  <button class="nav-btn" onclick="switchScreen('warmup',this)">
+    <div class="nav-icon"><svg class="nav-svg" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>Warm-up
+  </button>
+  <button class="nav-btn" onclick="switchScreen('1rm',this)">
+    <div class="nav-icon"><svg class="nav-svg" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>1RM Week
+  </button>
+  <button class="nav-btn" onclick="switchScreen('tools',this)">
+    <div class="nav-icon"><svg class="nav-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M12 20v2M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M2 12h2M20 12h2"/></svg></div>Tools
+  </button>
 </nav>
 
 <script>
-const STORE = 'sbd_athletes';
-let currentAthlete = 0;
-let athletes = [{name:'Athlete 1',sq:'',bp:'',dl:''},{name:'Athlete 2',sq:'',bp:'',dl:''}];
+const STORE='fortis_sbd_v1';
+let cPct=0.85, cLift='sq', c1RMLift='sq';
+let timerInterval=null,timerTotal=180,timerRemaining=180,timerRunning=false;
 
-function load(){ try{ const d=JSON.parse(localStorage.getItem(STORE)); if(d&&d.length===2) athletes=d; }catch(e){} }
-function save(){
-  athletes[currentAthlete].sq=document.getElementById('rm-sq').value;
-  athletes[currentAthlete].bp=document.getElementById('rm-bp').value;
-  athletes[currentAthlete].dl=document.getElementById('rm-dl').value;
-  try{ localStorage.setItem(STORE,JSON.stringify(athletes)); }catch(e){}
-}
-function loadInputs(){
-  const a=athletes[currentAthlete];
-  document.getElementById('rm-sq').value=a.sq||'';
-  document.getElementById('rm-bp').value=a.bp||'';
-  document.getElementById('rm-dl').value=a.dl||'';
-}
-function switchAthlete(idx,btn){
-  save();
-  currentAthlete=idx;
-  loadInputs();
-  document.querySelectorAll('.athlete-btn').forEach((b,i)=>b.classList.toggle('active',i===idx));
-  document.getElementById('setup-name').textContent=athletes[idx].name;
-  document.getElementById('header-sub').textContent=athletes[idx].name+' — 85% session';
-  render();
-  if(document.getElementById('screen-session').classList.contains('active')) renderSession();
-}
+let data={sq:'',bp:'',dl:'',attempts:{sq:[],bp:[],dl:[]},bwlog:[],notes:[]};
+
+function load(){try{const d=JSON.parse(localStorage.getItem(STORE));if(d){data=d;if(!data.attempts)data.attempts={sq:[],bp:[],dl:[]};if(!data.bwlog)data.bwlog=[];if(!data.notes)data.notes=[];}}catch(e){}}
+function persist(){try{localStorage.setItem(STORE,JSON.stringify(data));}catch(e){}}
+function save(){['sq','bp','dl'].forEach(k=>{const el=document.getElementById('rm-'+k);if(el)data[k]=el.value;});persist();}
+function loadInputs(){['sq','bp','dl'].forEach(k=>{const el=document.getElementById('rm-'+k);if(el)el.value=data[k]||'';});}
+
 function switchScreen(id,btn){
   save();
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('screen-'+id).classList.add('active');
   btn.classList.add('active');
-  if(id==='session') renderSession();
+  const t={sbd:'SBD Day',warmup:'Warm-up',1rm:'1RM Week',tools:'Tools'};
+  document.querySelector('.header-title').textContent='Fortis';
+  document.getElementById('hdr-sub').textContent=t[id]||'';
+  document.getElementById('hdr-badge').textContent=t[id]||'';
+  if(id==='warmup')renderWarmup();
+  if(id==='1rm')render1RMTool();
+  if(id==='bwlog')renderBWLog();
 }
 
-function r25(v){ return Math.round(v/2.5)*2.5; }
-function getRMs(){ return { sq:parseFloat(document.getElementById('rm-sq').value)||0, bp:parseFloat(document.getElementById('rm-bp').value)||0, dl:parseFloat(document.getElementById('rm-dl').value)||0 }; }
+function showTool(id){document.getElementById('tools-menu').style.display='none';document.querySelectorAll('.tool-screen').forEach(t=>t.classList.remove('active'));document.getElementById('tool-'+id).classList.add('active');if(id==='bwlog')renderBWLog();if(id==='notes')renderNotesList();}
+function hideTool(){document.getElementById('tools-menu').style.display='block';document.querySelectorAll('.tool-screen').forEach(t=>t.classList.remove('active'));}
 
-function platesFor(kg){
-  let rem=(kg-20)/2;
-  const av=[25,20,15,10,5,2.5,1.25]; const res=[];
-  for(const p of av){ while(rem>=p-0.01){ res.push(p); rem=Math.round((rem-p)*100)/100; } }
-  return res;
-}
+function r25(v){return Math.round(v/2.5)*2.5;}
+function getRMs(){return{sq:parseFloat(data.sq)||0,bp:parseFloat(data.bp)||0,dl:parseFloat(data.dl)||0};}
+function platesFor(kg){let rem=(kg-20)/2;const av=[25,20,15,10,5,2.5,1.25];const res=[];for(const p of av){while(rem>=p-0.01){res.push(p);rem=Math.round((rem-p)*100)/100;}}return res;}
 const pCls={25:'p25',20:'p20',15:'p15',10:'p10',5:'p5',2.5:'p25k',1.25:'p125'};
-function platesHTML(kg){
-  const ps=platesFor(kg);
-  if(!ps.length) return '<span style="font-size:11px;color:#8E8E93;">bar only</span>';
-  return ps.map(p=>`<span class="plate ${pCls[p]||'p125'}">${p}</span>`).join('');
-}
+function platesHTML(kg){const ps=platesFor(kg);if(!ps.length)return'<span style="font-size:10px;color:var(--text3);">bar only</span>';return ps.map(p=>`<span class="plate ${pCls[p]||'p125'}">${p}</span>`).join('');}
 
-function stepRow(num, type, kg, pctOfRM, sets, note){
-  const cls=type==='top'?'top':type==='back'?'back':'';
-  const lbl=type==='top'?'T':type==='back'?'B':num;
-  const typeLabel=type==='top'?'top set':type==='back'?'back-off':'warm-up';
-  return `<div class="step">
-    <div class="step-circle ${cls}">${lbl}</div>
-    <div class="step-body">
-      <div><span class="step-kg">${kg}kg</span><span class="step-pct">${pctOfRM}% of 1RM</span></div>
-      <div class="step-plates">${platesHTML(kg)}</div>
-      ${note?`<div class="step-note">${note}</div>`:''}
-    </div>
-    <div class="step-right">
-      <div class="step-sets">${sets}</div>
-      <div class="step-type">${typeLabel}</div>
-    </div>
-  </div>`;
-}
+function setPct(p,btn){cPct=p;document.querySelectorAll('.pct-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderSBD();}
+function showLift(l,btn){cLift=l;document.querySelectorAll('.lift-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderLiftCard();}
 
-function buildLiftCard(title, rm, backSets, restText, cue, headerClass){
-  if(!rm) return `<div class="lift-card">
-    <div class="lift-header ${headerClass}">
-      <div><div class="lift-title">${title}</div><div class="lift-cue">${cue}</div></div>
-      <div><div class="lift-topset-val">—</div><div class="lift-topset-lbl">enter 1RM</div></div>
-    </div>
-    <div class="empty"><strong>No 1RM set</strong>Go to setup and enter your ${title.toLowerCase()} 1RM</div>
-  </div>`;
-
-  // All percentages are of the actual 1RM — no confusion
-  const warmupPcts = [40, 55, 65, 72.5, 80];
-  const topPct = 85;
-  const backPct = 75;
-
-  const topKg  = r25(rm * topPct  / 100);
-  const backKg = r25(rm * backPct / 100);
-
-  let steps = `<div class="ladder-lbl">Warm-up ladder — all % of your 1RM</div>`;
-
-  // Bar
-  steps += stepRow(1, 'warm', 20, 'bar', '1×8', 'technique — feel the movement');
-
-  // Warm-up steps
-  warmupPcts.forEach((pct, i) => {
-    const kg = r25(rm * pct / 100);
-    const notes = {
-      40: '',
-      55: '',
-      65: '',
-      72.5: '',
-      80: 'last warm-up — composure, own the setup',
-    };
-    steps += stepRow(i+2, 'warm', kg, pct, i < 3 ? `1×${5-i}` : '1×1', notes[pct]||'');
-  });
-
-  // Top single
-  steps += stepRow('T', 'top', topKg, topPct, '1×1', 'confident and controlled — do not add weight if it feels easy');
-
-  // Back-off
-  steps += stepRow('B', 'back', backKg, backPct, backSets, 'strong solid reps');
-
-  return `<div class="lift-card">
-    <div class="lift-header ${headerClass}">
-      <div><div class="lift-title">${title}</div><div class="lift-cue">${cue}</div></div>
-      <div><div class="lift-topset-val">${topKg}kg</div><div class="lift-topset-lbl">top set (85%)</div></div>
-    </div>
-    ${steps}
-    <div class="rest-pill">${restText}</div>
-  </div>`;
-}
-
-function render(){
+function renderSBD(){
   const rms=getRMs();
+  const backPct=cPct-0.10;
   ['sq','bp','dl'].forEach(k=>{
-    const rm=rms[k];
-    document.getElementById('tm-'+k).textContent=rm
-      ? `85%: ${r25(rm*.85)}kg · back-off 75%: ${r25(rm*.75)}kg`
-      : '85%: — · back-off 75%: —';
+    const rm=rms[k];const el=document.getElementById('sub-'+k);if(!el)return;
+    el.textContent=rm?`Top: ${r25(rm*cPct)}kg · Back-off: ${r25(rm*backPct)}kg`:'Enter 1RM';
   });
-}
-
-function renderSession(){
-  const rms=getRMs();
   const any=rms.sq||rms.bp||rms.dl;
-  let html='';
-
-  if(any){
-    html+=`<div class="summary-strip">
-      <div class="s-cell"><div class="s-lift">Squat</div><div class="s-val">${rms.sq?r25(rms.sq*.85)+'kg':'—'}</div><div class="s-pct">85% top set</div></div>
-      <div class="s-cell"><div class="s-lift">Bench</div><div class="s-val">${rms.bp?r25(rms.bp*.85)+'kg':'—'}</div><div class="s-pct">85% top set</div></div>
-      <div class="s-cell"><div class="s-lift">Deadlift</div><div class="s-val">${rms.dl?r25(rms.dl*.85)+'kg':'—'}</div><div class="s-pct">85% top set</div></div>
-    </div>`;
-  }
-
-  html += buildLiftCard('Squat',      rms.sq, '2×3', 'Rest 3–4 min after top set · 2–3 min between back-offs',                         'Brace, depth, drive knees out',                    'squat');
-  html += buildLiftCard('Bench press',rms.bp, '2×3', 'Rest 3–4 min after top set · 2 min between back-offs · get a spot on top single', '1s pause on chest · leg drive · stay tight',       'bench');
-  html += buildLiftCard('Deadlift',   rms.dl, '1×3', 'Rest 4–5 min after top set · one back-off only · session done after this',        'Own the set-up · push the floor away · stay over bar','deadlift');
-
-  if(!any) html=`<div class="empty"><strong>No 1RMs entered</strong>Go to setup and enter your lifts to generate the session</div>`;
-
-  document.getElementById('session-out').innerHTML=html;
+  document.getElementById('sbd-summary').style.display=any?'block':'none';
+  if(!any)return;
+  document.getElementById('sbd-strip').innerHTML=[
+    {k:'sq',l:'Squat'},{k:'bp',l:'Bench'},{k:'dl',l:'Deadlift'}
+  ].map(lk=>`<div class="s-cell"><div class="s-lbl">${lk.l}</div><div class="s-val">${rms[lk.k]?r25(rms[lk.k]*cPct)+'kg':'—'}</div><div class="s-sub">${Math.round(cPct*100)}% top set</div></div>`).join('');
+  renderLiftCard();
 }
 
-load(); loadInputs(); render();
+function renderLiftCard(){
+  const rms=getRMs();const rm=rms[cLift]||0;
+  const backPct=cPct-0.10;
+  const liftMeta={
+    sq:{name:'Squat',cue:'Brace, depth, drive knees out',rest:'3–4 min after top · 2–3 min between back-offs',bo:'2×3',hdr:'lift-header-sq'},
+    bp:{name:'Bench press',cue:'1s pause on chest · leg drive · stay tight',rest:'3–4 min after top · 2 min between back-offs · get a spot',bo:'2×3',hdr:'lift-header-bp'},
+    dl:{name:'Deadlift',cue:'Own the set-up · push the floor away · stay over bar',rest:'4–5 min after top · one back-off only · session done',bo:'1×3',hdr:'lift-header-dl'},
+  };
+  const m=liftMeta[cLift];
+  if(!rm){document.getElementById('lift-out').innerHTML=`<div class="empty"><div class="empty-icon"><svg class="empty-svg" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><div class="empty-title">No 1RM for ${m.name}</div><div class="empty-sub">Enter your ${m.name.toLowerCase()} max above</div></div>`;return;}
+  const top=r25(rm*cPct);const back=r25(rm*backPct);
+  const steps=[
+    {kg:20,pct:'bar',s:'1×8',note:'technique — own the movement',type:'warm'},
+    {kg:r25(top*.40),pct:'40%',s:'1×5',note:'',type:'warm'},
+    {kg:r25(top*.55),pct:'55%',s:'1×4',note:'',type:'warm'},
+    {kg:r25(top*.65),pct:'65%',s:'1×3',note:'',type:'warm'},
+    {kg:r25(top*.725),pct:'72.5%',s:'1×2',note:'',type:'warm'},
+    {kg:r25(top*.80),pct:'80%',s:'1×1',note:'last warm-up — composure',type:'warm'},
+    {kg:top,pct:`${Math.round(cPct*100)}% — top set`,s:'1×1',note:'confident and controlled',type:'top'},
+    {kg:back,pct:`${Math.round(backPct*100)}% — back-off`,s:m.bo,note:'strong solid reps',type:'back'},
+  ];
+  document.getElementById('lift-out').innerHTML=`
+    <div class="${m.hdr}" style="margin-bottom:0;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div><div class="lift-name">${m.name}</div><div class="lift-cue">${m.cue}</div></div>
+        <div style="text-align:right;"><div class="lift-top-val">${top}kg</div><div class="lift-top-lbl">top set</div></div>
+      </div>
+    </div>
+    <div class="lift-card-body">
+      ${steps.map((s,i)=>`<div class="wu-step" style="padding:10px 16px;"><div class="wu-circle ${s.type==='top'?'top':s.type==='back'?'back':''}">${s.type==='top'?'T':s.type==='back'?'B':i+1}</div><div class="wu-body"><div><span class="wu-kg">${s.kg}kg</span><span class="wu-pct">${s.pct}</span></div><div class="wu-plates">${platesHTML(s.kg)}</div>${s.note?`<div class="wu-note">${s.note}</div>`:''}</div><div class="wu-right"><div class="wu-sets">${s.s}</div><div class="wu-type">${s.type==='top'?'top set':s.type==='back'?'back-off':'warm-up'}</div></div></div>`).join('')}
+      <div class="rest-note">${m.rest}</div>
+    </div>`;
+}
+
+function renderWarmup(){
+  const rms=getRMs();
+  const v=parseFloat(document.getElementById('wu-manual').value)||0;
+  document.getElementById('wu-quick-btns').innerHTML=[{k:'sq',l:'Squat'},{k:'bp',l:'Bench'},{k:'dl',l:'Deadlift'}].map(lk=>rms[lk.k]?`<button onclick="document.getElementById('wu-manual').value=${rms[lk.k]};renderWarmup();" style="flex:1;padding:8px 6px;border-radius:var(--rs);border:0.5px solid var(--border2);background:var(--bg3);color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;">${lk.l}<br><span style="color:var(--gold);font-size:13px;font-weight:800;">${rms[lk.k]}kg</span></button>`:''  ).join('');
+  const out=document.getElementById('wu-out');
+  if(!v||v<20){out.innerHTML='';return;}
+  const wkg=r25(v);
+  const steps=[{kg:20,pct:'bar',s:'1×8',note:'technique',type:'warm'},{kg:r25(wkg*.40),pct:'40%',s:'1×5',note:'',type:'warm'},{kg:r25(wkg*.55),pct:'55%',s:'1×4',note:'',type:'warm'},{kg:r25(wkg*.65),pct:'65%',s:'1×3',note:'',type:'warm'},{kg:r25(wkg*.725),pct:'72.5%',s:'1×2',note:'',type:'warm'},{kg:r25(wkg*.80),pct:'80%',s:'1×1',note:'last warm-up',type:'warm'},{kg:wkg,pct:'target weight',s:'work sets',note:'',type:'top'}];
+  out.innerHTML=`<div class="card"><div class="card-title">Warm-up ladder to ${wkg}kg</div>${steps.map((s,i)=>`<div class="wu-step"><div class="wu-circle ${s.type==='top'?'top':''}">${s.type==='top'?'T':i+1}</div><div class="wu-body"><div><span class="wu-kg">${s.kg}kg</span><span class="wu-pct">${s.pct}</span></div><div class="wu-plates">${platesHTML(s.kg)}</div>${s.note?`<div class="wu-note">${s.note}</div>`:''}</div><div class="wu-right"><div class="wu-sets">${s.s}</div><div class="wu-type">${s.type==='top'?'target':'warm-up'}</div></div></div>`).join('')}</div>`;
+}
+
+function switch1RMLift(l){c1RMLift=l;['sq','bp','dl'].forEach(k=>document.getElementById('1rm-btn-'+k).classList.toggle('active',k===l));render1RMTool();}
+function render1RMTool(){
+  const rms=getRMs();const rm=rms[c1RMLift]||0;
+  const liftNames={sq:'Back squat',bp:'Bench press',dl:'Deadlift'};
+  const attempts=data.attempts[c1RMLift]||[];
+  if(!rm){document.getElementById('1rm-out').innerHTML=`<div class="empty"><div class="empty-icon"><svg class="empty-svg" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="empty-title">No 1RM entered</div><div class="empty-sub">Go to the SBD tab and enter your ${liftNames[c1RMLift]} max</div></div>`;return;}
+  const opener=r25(rm*.925),second=r25(rm*.975),third=r25(rm+2.5);
+  const goodAttempts=attempts.filter(a=>a.result==='good');const best=goodAttempts.length?Math.max(...goodAttempts.map(a=>a.kg)):0;const isPR=best>rm;
+  let html='';
+  if(isPR)html+=`<div class="pr-banner"><div class="pr-title">New PR — ${liftNames[c1RMLift]}</div><div class="pr-val">${best}kg</div><div class="pr-sub">Previous: ${rm}kg · +${best-rm}kg</div></div>`;
+  html+=`<div class="card" style="margin-bottom:10px;"><div class="card-title">Warm-up to opener (${opener}kg)</div>${[{kg:20,pct:'bar',s:'1×8'},{kg:r25(opener*.40),pct:'40%',s:'1×5'},{kg:r25(opener*.55),pct:'55%',s:'1×4'},{kg:r25(opener*.65),pct:'65%',s:'1×3'},{kg:r25(opener*.725),pct:'72.5%',s:'1×2'},{kg:r25(opener*.80),pct:'80%',s:'1×1'}].map((s,i)=>`<div class="wu-step"><div class="wu-circle">${i+1}</div><div class="wu-body"><div><span class="wu-kg">${s.kg}kg</span><span class="wu-pct">${s.pct}</span></div><div class="wu-plates">${platesHTML(s.kg)}</div></div><div class="wu-right"><div class="wu-sets">${s.s}</div><div class="wu-type">warm-up</div></div></div>`).join('')}</div>`;
+  const defAttempts=[{kg:opener,label:'Attempt 1 — opener',pct:'92.5%'},{kg:second,label:'Attempt 2',pct:'97.5%'},{kg:third,label:'Attempt 3 — PR target',pct:'+2.5kg'}];
+  const toShow=defAttempts.map((d,i)=>{const rec=attempts[i];return rec?{...d,...rec}:d;});
+  for(let i=3;i<attempts.length;i++)toShow.push({kg:attempts[i].kg,label:`Attempt ${i+1}`,pct:'',...attempts[i]});
+  html+=`<div class="card"><div class="card-title">Attempts — ${liftNames[c1RMLift]}</div>${toShow.map((att,i)=>`<div class="input-row" style="gap:8px;"><div style="flex:1;"><div style="font-size:15px;font-weight:700;letter-spacing:-0.3px;">${att.kg}kg</div><div style="font-size:11px;color:var(--text3);margin-top:2px;">${att.label}${att.pct?' · '+att.pct:''}</div></div><div>${att.result?`<span class="result-tag ${att.result==='good'?'tag-good':'tag-fail'}">${att.result==='good'?'✓ Good':'✗ Miss'}</span>`:`<div style="display:flex;gap:6px;"><button class="result-btn good" onclick="record1RMAttempt(${i},'good',${att.kg})">✓</button><button class="result-btn fail" onclick="record1RMAttempt(${i},'fail',${att.kg})">✗</button></div>`}</div></div>`).join('')}${attempts.length>=3?`<div style="padding:10px 0 2px;"><button onclick="add1RMAttempt(${best?r25(best+2.5):r25(rm+5)})" style="width:100%;padding:11px;border-radius:var(--rs);border:0.5px dashed var(--border2);background:transparent;font-size:13px;font-weight:600;color:var(--text3);cursor:pointer;">+ Add attempt at ${best?r25(best+2.5):r25(rm+5)}kg</button></div>`:''}</div>`;
+  if(attempts.length>0)html+=`<div style="text-align:center;margin-top:4px;"><button onclick="reset1RMAttempts()" style="font-size:12px;color:var(--red);background:transparent;border:none;cursor:pointer;padding:8px;font-weight:600;">Reset ${liftNames[c1RMLift]} attempts</button></div>`;
+  document.getElementById('1rm-out').innerHTML=html;
+}
+function record1RMAttempt(idx,result,kg){while(data.attempts[c1RMLift].length<=idx)data.attempts[c1RMLift].push({kg:0,result:null});data.attempts[c1RMLift][idx]={kg,result};persist();render1RMTool();}
+function add1RMAttempt(kg){data.attempts[c1RMLift].push({kg,result:null});persist();render1RMTool();}
+function reset1RMAttempts(){data.attempts[c1RMLift]=[];persist();render1RMTool();}
+
+// TIMER
+function setTimer(secs,btn){timerTotal=secs;timerRemaining=secs;timerRunning=false;clearInterval(timerInterval);document.querySelectorAll('.timer-preset').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');updateTimerDisplay();}
+function updateTimerDisplay(){const m=Math.floor(timerRemaining/60);const s=timerRemaining%60;document.getElementById('timer-display').textContent=m+':'+(s<10?'0':'')+s;const pct=timerRemaining/timerTotal;document.getElementById('timer-ring').style.strokeDashoffset=502*(1-pct);document.getElementById('timer-status').textContent=timerRunning?'Running...':timerRemaining===0?'Done!':timerRemaining===timerTotal?'Ready':'Paused';document.getElementById('timer-start-btn').textContent=timerRunning?'Pause':'Start';}
+function toggleTimer(){if(timerRemaining===0){resetTimer();return;}timerRunning=!timerRunning;if(timerRunning){timerInterval=setInterval(()=>{timerRemaining--;updateTimerDisplay();if(timerRemaining<=0){clearInterval(timerInterval);timerRunning=false;beep();}},1000);}else{clearInterval(timerInterval);}updateTimerDisplay();}
+function resetTimer(){clearInterval(timerInterval);timerRunning=false;timerRemaining=timerTotal;updateTimerDisplay();}
+function stopTimer(){clearInterval(timerInterval);timerRunning=false;}
+function beep(){try{const ctx=new(window.AudioContext||window.webkitAudioContext)();const o=ctx.createOscillator();const g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=880;g.gain.setValueAtTime(0.5,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.8);o.start(ctx.currentTime);o.stop(ctx.currentTime+0.8);}catch(e){}}
+
+// MAX ESTIMATOR
+function calcEstimate(){const w=parseFloat(document.getElementById('est-weight').value)||0;const r=parseInt(document.getElementById('est-reps').value)||0;const out=document.getElementById('est-out');if(!w||!r){out.innerHTML='';return;}const e=r25(w*(1+r/30));out.innerHTML=`<div class="est-result"><div style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Estimated 1RM</div><div class="est-val">${e}kg</div><div style="font-size:12px;color:var(--text3);margin-top:4px;">${w}kg × ${r} reps · Epley formula</div></div><div class="card" style="margin-top:12px;"><div class="card-title">Percentages</div>${[[100,e],[95,r25(e*.95)],[90,r25(e*.90)],[85,r25(e*.85)],[80,r25(e*.80)],[75,r25(e*.75)]].map(row=>`<div class="input-row" style="padding:10px 0;"><div style="font-size:14px;font-weight:600;color:var(--text);">${row[0]}%</div><div style="font-size:16px;font-weight:800;color:var(--gold);letter-spacing:-0.5px;">${row[1]}kg</div></div>`).join('')}</div>`;}
+
+// BODYWEIGHT LOG
+function logBW(){const v=parseFloat(document.getElementById('bw-input').value);if(!v||v<20||v>400)return;data.bwlog.unshift({kg:v,date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})});persist();document.getElementById('bw-input').value='';renderBWLog();}
+function deleteBW(idx){data.bwlog.splice(idx,1);persist();renderBWLog();}
+function renderBWLog(){
+  const log=data.bwlog||[];
+  document.getElementById('bw-chart-card').style.display=log.length>1?'block':'none';
+  document.getElementById('bw-list-card').style.display=log.length?'block':'none';
+  if(log.length>1){const canvas=document.getElementById('bw-chart');const ctx=canvas.getContext('2d');const dpr=window.devicePixelRatio||1;canvas.width=canvas.offsetWidth*dpr;canvas.height=120*dpr;ctx.scale(dpr,dpr);const W=canvas.offsetWidth,H=120;ctx.clearRect(0,0,W,H);const vals=log.map(e=>e.kg).reverse();const mn=Math.min(...vals)-2,mx=Math.max(...vals)+2;const xS=i=>i*(W-20)/(vals.length-1)+10;const yS=v=>H-10-(v-mn)/(mx-mn)*(H-20);ctx.strokeStyle='var(--border2)';ctx.lineWidth=0.5;ctx.beginPath();vals.forEach((v,i)=>i===0?ctx.moveTo(xS(i),yS(v)):ctx.lineTo(xS(i),yS(v)));ctx.stroke();ctx.strokeStyle='#D4AF6A';ctx.lineWidth=2;ctx.beginPath();vals.forEach((v,i)=>i===0?ctx.moveTo(xS(i),yS(v)):ctx.lineTo(xS(i),yS(v)));ctx.stroke();vals.forEach((v,i)=>{ctx.fillStyle='#D4AF6A';ctx.beginPath();ctx.arc(xS(i),yS(v),3,0,2*Math.PI);ctx.fill();});}
+  document.getElementById('bw-list').innerHTML=log.map((e,i)=>`<div class="bw-entry"><div style="font-size:13px;font-weight:600;color:var(--text);">${e.date}</div><div style="display:flex;align-items:center;gap:10px;"><div class="bw-weight">${e.kg}kg</div><button class="bw-del" onclick="deleteBW(${i})">✕</button></div></div>`).join('');
+}
+
+// NOTES
+function addNote(){const title=document.getElementById('note-title-input').value.trim();const body=document.getElementById('note-body-input').value.trim();if(!title&&!body)return;data.notes.unshift({title:title||'Untitled',body,date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})});persist();document.getElementById('note-title-input').value='';document.getElementById('note-body-input').value='';renderNotesList();}
+function renderNotesList(){const notes=data.notes||[];document.getElementById('notes-list-card').style.display=notes.length?'block':'none';document.getElementById('notes-list').innerHTML=notes.map((n,i)=>`<div class="note-item" onclick="openNote(${i})"><div class="note-item-title">${n.title}</div><div class="note-item-preview">${n.body}</div><div class="note-item-date">${n.date}</div></div>`).join('');}
+function openNote(idx){const n=data.notes[idx];document.getElementById('notes-list-view').style.display='none';document.getElementById('note-detail-view').style.display='block';document.getElementById('note-detail-content').innerHTML=`<div class="note-detail-title">${n.title}</div><div class="note-detail-body">${n.body}</div><div class="note-detail-date">${n.date}</div>`;document.getElementById('note-delete-btn').onclick=()=>deleteNote(idx);}
+function closeNote(){document.getElementById('notes-list-view').style.display='block';document.getElementById('note-detail-view').style.display='none';}
+function deleteNote(idx){data.notes.splice(idx,1);persist();closeNote();renderNotesList();}
+
+load();loadInputs();renderSBD();updateTimerDisplay();
 </script>
 </body>
 </html>
