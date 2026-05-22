@@ -374,7 +374,7 @@ function switchScreen(id,btn){
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('screen-'+id).classList.add('active');
   btn.classList.add('active');
-  const t={sbd:'SBD Day',warmup:'Warm-up',1rm:'1RM Week',tools:'Tools'};
+  const t={sbd:'SBD Day',warmup:'Warm-up','1rm':'1RM Week',tools:'Tools'};
   document.querySelector('.header-title').textContent='Fortis';
   document.getElementById('hdr-sub').textContent=t[id]||'';
   document.getElementById('hdr-badge').textContent=t[id]||'';
